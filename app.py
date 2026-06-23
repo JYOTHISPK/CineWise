@@ -1,0 +1,423 @@
+from src.ContextBased import recommend
+from src.ContentBased import (
+    liked,
+    disliked,
+    watched,
+    save_user_data
+)
+
+
+import random
+import json
+import streamlit as st
+import os
+import time
+
+# ---------------- PAGE ---------------- #
+
+st.set_page_config(
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
+
+st.markdown("""
+<style>
+
+/* HIDE SIDEBAR */
+[data-testid="stSidebar"] {
+    display: none;
+}
+
+/* REMOVE SIDEBAR NAV */
+[data-testid="collapsedControl"] {
+    display: none;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+
+# ---------------- TOP BAR ---------------- #
+
+left_space, logo_col, profile_col = st.columns([4,8,1])
+
+# ---------------- LOGO ---------------- #
+
+with logo_col:
+
+    st.markdown( "<div style='margin-top:40px'></div>", unsafe_allow_html=True )
+
+    st.image(
+        r"images\others\IMG_20260621_150902.png",
+        width=420
+    )
+
+# ---------------- PROFILE BUTTON ---------------- #
+
+with profile_col:
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
+
+    if st.button("👤"):
+
+        st.switch_page("pages/profile.py")
+
+
+
+# ---------------- SESSION ---------------- #
+
+if "banner_index" not in st.session_state:
+    st.session_state.banner_index = 0
+
+# ---------------- CSS ---------------- #
+
+
+
+st.markdown("""
+<style>
+
+/* APP */
+.stApp {
+    background-color: black;
+}
+
+/* HEADER */
+header {
+    background-color: black !important;
+}
+
+[data-testid="stHeader"] {
+    background-color: black;
+}
+
+/* FULL WIDTH */
+.block-container {
+    max-width: 100% !important;
+    padding-top: 1rem;
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+}
+
+/* REMOVE COLUMN PADDING */
+[data-testid="column"] {
+    padding: 0rem 0.25rem !important;
+}
+
+/* IMAGES */
+[data-testid="stImage"] img {
+    border-radius: 12px;
+}
+
+/* MOVIE CARD */
+.movie-card {
+
+    border: 1px solid rgba(255,255,255,0.12);
+
+    border-radius: 16px;
+
+    padding: 18px;
+
+    background-color: rgba(255,255,255,0.03);
+
+    height: 240px;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+    0px 0px 10px rgba(255,255,255,0.05);
+}
+
+/* TITLE */
+.movie-title {
+
+    color: white;
+
+    font-size: 24px;
+
+    font-weight: 700;
+
+    line-height: 1.3;
+
+    height: 78px;
+
+    overflow: hidden;
+}
+
+/* DETAILS */
+.movie-details {
+
+    color: #b8b8b8;
+
+    font-size: 15px;
+
+    line-height: 1.6;
+
+    margin-top: 10px;
+
+    height: 65px;
+
+    overflow: hidden;
+}
+
+/* RATING */
+.movie-rating {
+
+    color: #FFD54F;
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+    margin-top: 10px;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+
+
+# ---------------- BANNERS ---------------- #
+
+banner_folder = "images/poster"
+
+banners = sorted(
+    os.listdir(banner_folder)
+)
+
+current = st.session_state.banner_index
+
+indexes = [
+    (current + i) % len(banners)
+    for i in range(5)
+]
+
+cols = st.columns(5, gap="small")
+
+for col, idx in zip(cols, indexes):
+
+    with col:
+
+        st.image(
+            os.path.join(
+                banner_folder,
+                banners[idx]
+            ),
+            use_container_width=True
+        )
+
+
+# ---------------- LOAD MOVIES ---------------- #
+
+
+movies = recommend(
+)
+
+top_movies = movies[:20]
+
+explore_movies = movies[20:300]
+
+random_movies = random.sample(
+    explore_movies,
+    10
+)
+
+movies = (
+    top_movies + random_movies
+)
+
+
+
+
+
+
+# ---------------- TITLE ---------------- #
+
+st.markdown("""
+<h1 style="
+color:white;
+margin-top:30px;
+margin-bottom:35px;
+margin-left:100px;
+font-size:58px;
+font-weight:800;
+">
+TOP RECOMMENDS FOR YOU
+</h1>
+""", unsafe_allow_html=True)
+
+# ---------------- MOVIES ---------------- #
+
+for i in range(0, min(len(movies), 30), 5):
+
+    left_space, main_area, right_space = st.columns([0.08, 1, 0.08])
+
+    with main_area:
+
+        cols = st.columns(5)
+
+        batch = movies[i:i+5]
+
+        for col, movie in zip(cols, batch):
+
+            with col:
+
+                movie_name = movie["name"]
+                movie_id = movie["id"]
+
+                with st.container(border=True):
+
+                    # ---------------- TITLE ---------------- #
+
+                    st.markdown(
+                        f"""
+                        <div style="
+                        height:70px;
+                        font-size:28px;
+                        font-weight:700;
+                        color:white;
+                        overflow:hidden;
+                        line-height:1.3;
+                        ">
+                        {movie_name}
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
+
+                    # ---------------- DETAILS ---------------- #
+
+                    st.markdown(
+                        f"""
+                        <div style="
+                        height:65px;
+                        color:#b8b8b8;
+                        font-size:15px;
+                        line-height:1.6;
+                        margin-top:10px;
+                        overflow:hidden;
+                        ">
+                        {movie['year']} |
+                        {movie['language']} <br>
+                        {movie['genre']}
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
+
+                    # ---------------- RATING ---------------- #
+
+                    st.markdown(
+                        f"""
+                        <div style="
+                        color:#FFD54F;
+                        font-size:18px;
+                        font-weight:600;
+                        margin-top:10px;
+                        margin-bottom:10px;
+                        ">
+                        ⭐ {movie['rating']}
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
+
+                    # ---------------- STATUS ---------------- #
+
+                    if movie_id in liked:
+
+                        st.success("✓ Liked")
+
+                    elif movie_id in disliked:
+
+                        st.error("✕ Disliked")
+
+                    elif movie_id in watched:
+
+                        st.info("👁 Watched")
+
+                    # ---------------- BUTTONS ---------------- #
+
+                    c1, c2, c3 = st.columns(3)
+
+                    # ---------------- LIKE BUTTON ---------------- #
+
+                    with c1:
+
+                        if st.button(
+                            "👍 ",
+                            key=f"like_{movie_id}"
+                        ):
+
+                            # REMOVE FROM DISLIKED
+                            if movie_id in disliked:
+
+                                disliked.remove(movie_id)
+
+                            # ADD TO LIKED
+                            if movie_id not in liked:
+
+                                liked.append(movie_id)
+
+                            # ADD TO WATCHED
+                            if movie_id not in watched:
+
+                                watched.append(movie_id)
+
+                            save_user_data()
+                            st.rerun()
+
+                    # ---------------- DISLIKE BUTTON ---------------- #
+
+                    with c2:
+
+                        if st.button(
+                            "👎 ",
+                            key=f"dislike_{movie_id}"
+                        ):
+
+                            # REMOVE FROM LIKED
+                            if movie_id in liked:
+
+                                liked.remove(movie_id)
+
+                            # ADD TO DISLIKED
+                            if movie_id not in disliked:
+
+                                disliked.append(movie_id)
+
+                            # ADD TO WATCHED
+                            if movie_id not in watched:
+
+                                watched.append(movie_id)
+
+                            save_user_data()
+                            st.rerun()
+
+                    # ---------------- WATCH BUTTON ---------------- #
+
+                    with c3:
+
+                        if st.button(
+                            "👁 ",
+                            key=f"watch_{movie_id}"
+                        ):
+
+                            # ADD TO WATCHED
+                            if movie_id not in watched:
+
+                                watched.append(movie_id)
+                            
+                            save_user_data()
+                            st.rerun()
+
+                            
+# ---------------- AUTO SLIDE ---------------- #
+
+time.sleep(3)
+
+st.session_state.banner_index = (
+    st.session_state.banner_index + 1
+) % len(banners)
+
+st.rerun()
+
