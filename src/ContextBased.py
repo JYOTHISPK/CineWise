@@ -79,13 +79,13 @@ def recommend() :
         # region score
 
         if language in region_map[region] :
-            score += 5
+            score += 1
 
         # age score
 
         for g in age_map[age_group] :
             if g in genre :
-                score +=5
+                score +=1
                 break
         
         # movie era score
@@ -130,6 +130,5 @@ def recommend() :
     recommendations = sorted(recommendations , key = lambda x:x["score"] , reverse=True)
         
     return recommendations
-
-            
+          
     

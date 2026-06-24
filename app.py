@@ -226,7 +226,7 @@ movies = (
 )
 
 
-
+print(movies[:100])
 
 
 
@@ -419,5 +419,5 @@ st.session_state.banner_index = (
     st.session_state.banner_index + 1
 ) % len(banners)
 
-st.rerun()
+#st.rerun()
 
