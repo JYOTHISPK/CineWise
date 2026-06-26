@@ -126,6 +126,7 @@ def recommend() :
     for i, j in zip(content_score.keys(), normalised_score):
         recommendations[index]["score"] = float (content_score[i] *weightage_first + j *weightage_second)
         index += 1
+
     
     recommendations = sorted(recommendations , key = lambda x:x["score"] , reverse=True)
         

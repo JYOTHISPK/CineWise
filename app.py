@@ -212,13 +212,13 @@ for col, idx in zip(cols, indexes):
 movies = recommend(
 )
 
-top_movies = movies[:20]
+top_movies = movies[:15]
 
-explore_movies = movies[20:300]
+explore_movies = movies[15:2000]
 
 random_movies = random.sample(
     explore_movies,
-    10
+    15
 )
 
 movies = (

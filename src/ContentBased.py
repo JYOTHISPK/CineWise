@@ -75,7 +75,7 @@ def save_user_data():
 
 def generate_content_scores():
 
-    watched_all = set(liked + disliked + watched)
+    watched_all = set(liked + disliked  + watched)
 
     movies = df['Movie Name']
 
@@ -116,7 +116,7 @@ def generate_content_scores():
 
     if length :
 
-        weightage_second = max(0.1,1-(length*0.2))
+        weightage_second = max(0.1,1-(length*0.1))
 
         weightage_first = 1 - weightage_second
 
@@ -140,20 +140,12 @@ def generate_content_scores():
 
         distance = jensenshannon( P , Q )
         divergence = distance ** 2
+        print(divergence)
 
-        if divergence < 0.5 :
-
-            if len(disliked) > 5 and len(disliked) >= 2 * len(liked):
-                divergence = 2
-            
-            elif len(disliked) >= 3 * len(liked):
-                divergence = 2
-            
-            else :
-
-                imbalance_factor =len(disliked) / len(liked) + len(disliked)
-
-                divergence = divergence * (1 + imbalance_factor)
+        if divergence < 0.4 and liked:
+            divergence = 0.4
+            if len(disliked) >= 2 * len(liked):
+                divergence *= 2
 
     else :
 
@@ -190,7 +182,7 @@ def generate_content_scores():
     )
 
 
-
+generate_content_scores()
 
 
 
