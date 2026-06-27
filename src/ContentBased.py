@@ -4,6 +4,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 from scipy.spatial.distance import jensenshannon
+import json
 
 
 PROJECT_ROOT = Path.cwd()
@@ -18,12 +19,8 @@ df = df.reset_index(drop=True)
 df["movie_id"] = df.index
 
 
-
 cv = CountVectorizer()
 count_matrix = cv.fit_transform(df["Combined_Features"])
-
-import json
-
 
 
 # ---------------- LOAD USER DATA ---------------- #
@@ -71,7 +68,6 @@ def save_user_data():
         )
 
 
-          
 
 def generate_content_scores():
 
@@ -140,7 +136,6 @@ def generate_content_scores():
 
         distance = jensenshannon( P , Q )
         divergence = distance ** 2
-        print(divergence)
 
         if divergence < 0.4 and liked:
             divergence = 0.4
@@ -182,7 +177,6 @@ def generate_content_scores():
     )
 
 
-generate_content_scores()
 
 
 

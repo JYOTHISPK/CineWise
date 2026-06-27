@@ -1,33 +1,11 @@
 import numpy as np
-
-import random
-
+import json
 from src.ContentBased import df,generate_content_scores
-
 from src.mapping import (
     region_map,
     age_map,
     movie_era_map
 )
-
-
-#PROFILE
-
-import json
-
-# ---------------- LOAD USER DATA ---------------- #
-
-with open(
-    "data/user_data.json",
-    "r"
-) as f:
-
-    data = json.load(f)
-
-region = data["region"]
-age = data["age"]    
-
-
 
 
 def get_age_group(age) :
@@ -58,7 +36,7 @@ def recommend() :
     region = data["region"] 
     age = data["age"]
 
-    content_score, unwatched, weightage_first, weightage_second = ( generate_content_scores() )
+    content_score, unwatched, weightage_first, weightage_second =  generate_content_scores() 
 
     new_df = df.loc[unwatched]
 

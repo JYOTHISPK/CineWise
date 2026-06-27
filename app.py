@@ -6,12 +6,9 @@ from src.ContentBased import (
     save_user_data
 )
 
-
 import random
-import json
 import streamlit as st
 import os
-import time
 
 # ---------------- PAGE ---------------- #
 
@@ -63,15 +60,7 @@ with profile_col:
         st.switch_page("pages/profile.py")
 
 
-
-# ---------------- SESSION ---------------- #
-
-if "banner_index" not in st.session_state:
-    st.session_state.banner_index = 0
-
 # ---------------- CSS ---------------- #
-
-
 
 st.markdown("""
 <style>
@@ -175,6 +164,11 @@ header {
 """, unsafe_allow_html=True)
 
 
+# ---------------- INIT ---------------- #
+
+if "banner_index" not in st.session_state:
+
+    st.session_state.banner_index = 0
 
 # ---------------- BANNERS ---------------- #
 
@@ -186,28 +180,47 @@ banners = sorted(
 
 current = st.session_state.banner_index
 
-indexes = [
-    (current + i) % len(banners)
+# pick 5 sequential banners
+
+selected_banners = [
+
+    banners[(current + i) % len(banners)]
+
     for i in range(5)
+
 ]
+
+# ---------------- DISPLAY ---------------- #
 
 cols = st.columns(5, gap="small")
 
-for col, idx in zip(cols, indexes):
+for col, banner in zip(cols, selected_banners):
 
     with col:
 
         st.image(
+
             os.path.join(
                 banner_folder,
-                banners[idx]
+                banner
             ),
+
             use_container_width=True
+
         )
+
+# ---------------- SHIFT FOR NEXT RERUN ---------------- #
+
+st.session_state.banner_index = (
+
+    current + 1
+
+) % len(banners)
+
+
 
 
 # ---------------- LOAD MOVIES ---------------- #
-
 
 movies = recommend(
 )
@@ -224,10 +237,6 @@ random_movies = random.sample(
 movies = (
     top_movies + random_movies
 )
-
-
-print(movies[:100])
-
 
 
 # ---------------- TITLE ---------------- #
@@ -410,14 +419,22 @@ for i in range(0, min(len(movies), 30), 5):
                             save_user_data()
                             st.rerun()
 
-                            
-# ---------------- AUTO SLIDE ---------------- #
+# ---------------- WATERMARK ---------------- #
 
-time.sleep(3)
+st.markdown("""
 
-st.session_state.banner_index = (
-    st.session_state.banner_index + 1
-) % len(banners)
+<div style="
+text-align:center;
+margin-top:60px;
+margin-bottom:20px;
+color:rgba(255,255,255,0.35);
+font-size:14px;
+letter-spacing:1px;
+font-weight:500;
+">
 
-#st.rerun()
+Made by Jyothis P K
 
+</div>
+
+""", unsafe_allow_html=True)
