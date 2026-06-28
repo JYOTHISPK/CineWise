@@ -4,6 +4,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 from scipy.spatial.distance import jensenshannon
+import streamlit as st
 import json
 
 
@@ -19,8 +20,18 @@ df = df.reset_index(drop=True)
 df["movie_id"] = df.index
 
 
-cv = CountVectorizer()
-count_matrix = cv.fit_transform(df["Combined_Features"])
+@st.cache_resource
+def load_vectorizer():
+
+    cv = CountVectorizer()
+
+    count_matrix = cv.fit_transform(
+        df["Combined_Features"]
+    )
+
+    return cv, count_matrix
+
+cv, count_matrix = load_vectorizer()
 
 
 # ---------------- LOAD USER DATA ---------------- #
@@ -175,8 +186,3 @@ def generate_content_scores():
         weightage_first,
         weightage_second
     )
-
-
-
-
-

@@ -45,7 +45,7 @@ with logo_col:
     st.markdown( "<div style='margin-top:40px'></div>", unsafe_allow_html=True )
 
     st.image(
-        r"images\others\IMG_20260621_150902.png",
+        "images/others/IMG_20260621_150902.png",
         width=420
     )
 
