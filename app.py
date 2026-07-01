@@ -1,9 +1,8 @@
-from src.ContextBased import recommend
 from src.ContentBased import (
     load_user_data,
     save_user_data
 )
-
+from src.ContextBased import recommend
 import random
 import streamlit as st
 import os
