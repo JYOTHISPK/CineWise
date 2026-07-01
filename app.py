@@ -355,7 +355,7 @@ for i in range(0, min(len(movies), 30), 5):
                             "👍 ",
                             key=f"like_{movie_id}"
                         ):
-
+                            liked, disliked, watched = load_user_data()
                             # REMOVE FROM DISLIKED
                             if movie_id in disliked:
 
@@ -382,7 +382,7 @@ for i in range(0, min(len(movies), 30), 5):
                             "👎 ",
                             key=f"dislike_{movie_id}"
                         ):
-
+                            liked, disliked, watched = load_user_data()
                             # REMOVE FROM LIKED
                             if movie_id in liked:
 
@@ -409,7 +409,7 @@ for i in range(0, min(len(movies), 30), 5):
                             "👁 ",
                             key=f"watch_{movie_id}"
                         ):
-
+                            liked, disliked, watched = load_user_data()
                             # ADD TO WATCHED
                             if movie_id not in watched:
 
