@@ -1,17 +1,13 @@
-# pages/1_Profile.py
-
 from src.ContentBased import (
-    liked,
-    disliked,
-    watched,
+    load_user_data,
     save_user_data,
     df
 )
-
 from src.mapping import region_map
-
 import streamlit as st
 import json
+
+liked, disliked, watched = load_user_data()
 
 # ---------------- PAGE ---------------- #
 
@@ -213,7 +209,7 @@ with main_area:
 
                 liked.clear()
 
-                save_user_data()
+                save_user_data(liked,disliked,watched)
 
                 st.rerun()
 
@@ -241,7 +237,7 @@ with main_area:
 
                 disliked.clear()
 
-                save_user_data()
+                save_user_data(liked,disliked,watched)
 
                 st.rerun()
 
@@ -269,7 +265,7 @@ with main_area:
 
                 watched.clear()
 
-                save_user_data()
+                save_user_data(liked,disliked,watched)
 
                 st.rerun()
 
