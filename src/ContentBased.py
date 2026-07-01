@@ -36,23 +36,29 @@ cv, count_matrix = load_vectorizer()
 
 # ---------------- LOAD USER DATA ---------------- #
 
-with open(
-    "data/user_data.json",
-    "r"
-) as f:
+def load_user_data():
 
-    data = json.load(f)
+    with open(
+        "data/user_data.json",
+        "r"
+    ) as f:
 
-liked = data["liked"]
+        data = json.load(f)
 
-disliked = data["disliked"]
-
-watched = data["watched"]
+    return (
+        data["liked"],
+        data["disliked"],
+        data["watched"]
+    )
 
 
 # ---------------- SAVE FUNCTION ---------------- #
 
-def save_user_data():
+def save_user_data(
+    liked,
+    disliked,
+    watched
+):
 
     with open(
         "data/user_data.json",
@@ -62,9 +68,7 @@ def save_user_data():
         data = json.load(f)
 
     data["liked"] = liked
-
     data["disliked"] = disliked
-
     data["watched"] = watched
 
     with open(
@@ -81,6 +85,8 @@ def save_user_data():
 
 
 def generate_content_scores():
+
+    liked, disliked, watched = load_user_data()
 
     watched_all = set(liked + disliked  + watched)
 

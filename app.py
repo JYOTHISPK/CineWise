@@ -1,8 +1,6 @@
 from src.ContextBased import recommend
 from src.ContentBased import (
-    liked,
-    disliked,
-    watched,
+    load_user_data,
     save_user_data
 )
 
@@ -256,6 +254,8 @@ TOP RECOMMENDS FOR YOU
 
 # ---------------- MOVIES ---------------- #
 
+liked, disliked, watched = load_user_data()
+
 for i in range(0, min(len(movies), 30), 5):
 
     left_space, main_area, right_space = st.columns([0.08, 1, 0.08])
@@ -372,7 +372,7 @@ for i in range(0, min(len(movies), 30), 5):
 
                                 watched.append(movie_id)
 
-                            save_user_data()
+                            save_user_data(liked,disliked,watched)
                             st.rerun()
 
                     # ---------------- DISLIKE BUTTON ---------------- #
@@ -399,7 +399,7 @@ for i in range(0, min(len(movies), 30), 5):
 
                                 watched.append(movie_id)
 
-                            save_user_data()
+                            save_user_data(liked,disliked,watched)
                             st.rerun()
 
                     # ---------------- WATCH BUTTON ---------------- #
@@ -416,7 +416,7 @@ for i in range(0, min(len(movies), 30), 5):
 
                                 watched.append(movie_id)
                             
-                            save_user_data()
+                            save_user_data(liked,disliked,watched)
                             st.rerun()
 
 # ---------------- WATERMARK ---------------- #
